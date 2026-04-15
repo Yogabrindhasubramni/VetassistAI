@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(python gemini.py:*)",
+      "Bash(curl:*)",
+      "Bash(set PYTHONIOENCODING=utf-8)",
+      "Bash(start index.html)"
+    ]
+  }
+}

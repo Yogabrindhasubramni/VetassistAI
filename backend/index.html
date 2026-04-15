@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetAssist Pro - AI Veterinary Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            max-height: 800px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .status-bar {
+            background: #f8f9fa;
+            padding: 12px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4caf50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 30px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .user .message-avatar {
+            background: #667eea;
+        }
+
+        .assistant .message-avatar {
+            background: #4caf50;
+        }
+
+        .message-content {
+            max-width: 70%;
+            background: white;
+            padding: 15px 18px;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .user .message-content {
+            background: #667eea;
+            color: white;
+        }
+
+        .message-text {
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .risk-emergency {
+            background: #f44336;
+            color: white;
+        }
+
+        .risk-high {
+            background: #ff9800;
+            color: white;
+        }
+
+        .risk-medium {
+            background: #2196f3;
+            color: white;
+        }
+
+        .risk-low {
+            background: #4caf50;
+            color: white;
+        }
+
+        .recommended-action {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-left: 3px solid #667eea;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .input-area {
+            padding: 20px 30px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .animal-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .animal-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .animal-btn:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+
+        .animal-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .input-field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: none;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: #e0e0e0;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .send-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: flex;
+            gap: 5px;
+            padding: 15px;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .image-preview {
+            margin-top: 10px;
+            max-width: 200px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .welcome-message h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .welcome-message p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .processing-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .animal-selector {
+                flex-wrap: wrap;
+            }
+
+            .animal-btn {
+                flex: 0 0 calc(50% - 5px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐾 VetAssist Pro</h1>
+            <p>AI-Powered Veterinary Assistant with Gemini Pro</p>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span id="status-text">Connected to Gemini AI</span>
+            </div>
+            <div style="font-size: 12px; color: #999;">
+                <span id="model-info">Gemini 2.5 Flash</span>
+            </div>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="welcome-message">
+                <h2>Welcome to VetAssist Pro!</h2>
+                <p>I'm your AI veterinary assistant powered by Google Gemini.</p>
+                <p>Ask me questions about your pet's health, upload images, or get advice on pet care.</p>
+                <p style="margin-top: 15px; font-weight: 600;">Select your pet type below and start chatting!</p>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="animal-selector">
+                <button class="animal-btn active" data-animal="dog" onclick="selectAnimal('dog')">
+                    🐕 Dog
+                </button>
+                <button class="animal-btn" data-animal="cat" onclick="selectAnimal('cat')">
+                    🐱 Cat
+                </button>
+                <button class="animal-btn" data-animal="bird" onclick="selectAnimal('bird')">
+                    🦜 Bird
+                </button>
+                <button class="animal-btn" data-animal="rabbit" onclick="selectAnimal('rabbit')">
+                    🐰 Rabbit
+                </button>
+                <button class="animal-btn" data-animal="other" onclick="selectAnimal('other')">
+                    🐾 Other
+                </button>
+            </div>
+
+            <div class="input-wrapper">
+                <div class="input-field">
+                    <textarea
+                        id="messageInput"
+                        placeholder="Describe your pet's symptoms or ask a question..."
+                        rows="3"
+                        onkeypress="handleKeyPress(event)"
+                    ></textarea>
+                    <div class="file-input-wrapper">
+                        <label for="imageInput" class="file-input-label">
+                            📷 Upload Image (Optional)
+                        </label>
+                        <input type="file" id="imageInput" accept="image/*" onchange="handleImageSelect(event)">
+                        <span id="fileName" style="margin-left: 10px; font-size: 12px; color: #666;"></span>
+                    </div>
+                    <img id="imagePreview" class="image-preview" style="display: none;">
+                </div>
+                <button class="send-btn" onclick="sendMessage()" id="sendBtn">
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8001';
+        let selectedAnimal = 'dog';
+        let selectedImage = null;
+        let sessionId = 'session_' + Date.now();
+
+        // Check API health on load
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                const data = await response.json();
+                document.getElementById('status-text').textContent =
+                    data.gemini_connected ? 'Connected to Gemini AI' : 'API Connected (Gemini Offline)';
+                document.getElementById('model-info').textContent = data.model || 'Unknown Model';
+            } catch (error) {
+                document.getElementById('status-text').textContent = 'Connection Error';
+                document.querySelector('.status-dot').style.background = '#f44336';
+            }
+        }
+
+        function selectAnimal(animal) {
+            selectedAnimal = animal;
+            document.querySelectorAll('.animal-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-animal="${animal}"]`).classList.add('active');
+        }
+
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('fileName').textContent = file.name;
+
+                // Preview image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImage = e.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function addMessage(text, isUser, data = null) {
+            const chatContainer = document.getElementById('chatContainer');
+
+            // Remove welcome message
+            const welcome = chatContainer.querySelector('.welcome-message');
+            if (welcome) welcome.remove();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
+
+            let content = `
+                <div class="message-avatar">${isUser ? '👤' : '🤖'}</div>
+                <div class="message-content">
+                    <div class="message-text">${text}</div>
+            `;
+
+            if (data && !isUser) {
+                if (data.risk_level) {
+                    content += `<span class="risk-badge risk-${data.risk_level}">Risk: ${data.risk_level.toUpperCase()}</span>`;
+                }
+                if (data.recommended_action) {
+                    content += `<div class="recommended-action"><strong>Recommendation:</strong> ${data.recommended_action}</div>`;
+                }
+                if (data.processing_time) {
+                    content += `<div class="processing-time">Processed in ${data.processing_time}s</div>`;
+                }
+            }
+
+            content += '</div>';
+            messageDiv.innerHTML = content;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showLoading() {
+            const chatContainer = document.getElementById('chatContainer');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message assistant';
+            loadingDiv.id = 'loadingMessage';
+            loadingDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="loading">
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                        <div class="loading-dot"></div>
+                    </div>
+                </div>
+            `;
+            chatContainer.appendChild(loadingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function removeLoading() {
+            const loading = document.getElementById('loadingMessage');
+            if (loading) loading.remove();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (!message && !selectedImage) {
+                alert('Please enter a message or upload an image');
+                return;
+            }
+
+            // Disable send button
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+
+            // Add user message
+            let displayMessage = message || 'Please analyze this image of my pet';
+            addMessage(displayMessage, true);
+
+            // Clear input
+            input.value = '';
+
+            // Show loading
+            showLoading();
+
+            try {
+                const requestData = {
+                    text: message || 'Please analyze this image of my pet',
+                    animal_type: selectedAnimal,
+                    session_id: sessionId,
+                    image_base64: selectedImage || null
+                };
+
+                const response = await fetch(`${API_URL}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                const data = await response.json();
+
+                removeLoading();
+
+                if (data.status === 'success') {
+                    addMessage(data.response, false, data);
+                } else {
+                    addMessage('Sorry, there was an error processing your request: ' + (data.error || 'Unknown error'), false);
+                }
+
+            } catch (error) {
+                removeLoading();
+                addMessage('Connection error. Please make sure the API server is running on http://127.0.0.1:8001', false);
+                console.error('Error:', error);
+            }
+
+            // Clear image
+            selectedImage = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('fileName').textContent = '';
+            document.getElementById('imagePreview').style.display = 'none';
+
+            // Re-enable send button
+            sendBtn.disabled = false;
+        }
+
+        // Check health on load
+        checkHealth();
+    </script>
+</body>
+</html>

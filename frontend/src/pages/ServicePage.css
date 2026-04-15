@@ -1,0 +1,64 @@
+/* Service Page */
+.service-page { background: var(--bg-soft); }
+
+.gradient-text {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hero */
+.service-hero {
+  background: var(--brand-gradient);
+  padding: 90px 24px 70px;
+  text-align: center;
+}
+.service-hero-inner { max-width: 700px; margin: 0 auto; }
+.service-hero .section-label { color: rgba(255,255,255,0.8); }
+.service-hero .section-title { color: white; margin-bottom: 10px; }
+.service-hero .section-sub  { color: rgba(255,255,255,0.85); }
+
+/* Service Cards */
+.service-cards-section { padding: 60px 24px 40px; }
+.service-cards-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.service-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.service-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+
+.sc-badge {
+  position: absolute;
+  top: 20px; right: 20px;
+  padding: 4px 12px;
+  background: rgba(102,126,234,0.1);
+  color: var(--brand-start);
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.sc-icon { font-size: 36px; margin-bottom: 16px; }
+.service-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.service-card p  { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+/* Chat Section */
+.chat-section { padding: 40px 24px 80px; }
+.chat-section-header { text-align: center; margin-bottom: 40px; }
+
+@media (max-width: 600px) {
+  .service-cards-inner { grid-template-columns: 1fr; }
+}

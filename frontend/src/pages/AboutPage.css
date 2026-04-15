@@ -1,0 +1,141 @@
+/* ── About Page ── */
+.about-page { background: var(--bg-soft); }
+
+/* Hero */
+.about-hero {
+  background: var(--brand-gradient);
+  padding: 100px 24px 80px;
+  text-align: center;
+}
+.about-hero-inner { max-width: 760px; margin: 0 auto; }
+.about-hero .section-label { color: rgba(255,255,255,0.8); }
+.about-hero .section-title { color: white; margin-bottom: 20px; font-size: clamp(28px,4.5vw,46px); }
+.about-hero-sub {
+  font-size: 17px;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.75;
+}
+
+/* Crisis */
+.crisis-section { background: white; padding: 90px 24px; }
+.crisis-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.crisis-text p { font-size: 16px; color: var(--text-secondary); line-height: 1.75; }
+.crisis-text .section-title { margin: 12px 0 24px; }
+
+.crisis-image-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.crisis-paw-art {
+  font-size: 120px;
+  animation: pulse 3s infinite;
+  filter: drop-shadow(0 8px 24px rgba(102,126,234,0.25));
+}
+
+.crisis-quote {
+  background: rgba(102,126,234,0.07);
+  border-left: 4px solid var(--brand-start);
+  padding: 18px 20px;
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Incidents */
+.incidents-section { padding: 80px 24px; }
+.incidents-inner { max-width: 1100px; margin: 0 auto; }
+
+.incidents-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.incident-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  border: 1px solid var(--border);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.incident-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+
+.incident-country { font-size: 15px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; }
+.incident-stat {
+  font-size: 36px;
+  font-weight: 900;
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+.incident-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+/* Mission */
+.mission-section {
+  background: #0e0f1a;
+  padding: 90px 24px;
+}
+.mission-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+.mission-accent { font-size: 60px; margin-bottom: 24px; animation: pulse 3s infinite; }
+.mission-inner h2 { font-size: 36px; font-weight: 800; color: white; margin-bottom: 20px; }
+.mission-inner p { font-size: 16px; color: #999; line-height: 1.8; }
+.mission-inner p + p { margin-top: 14px; }
+
+/* Values */
+.values-section { background: white; padding: 90px 24px; }
+.values-inner { max-width: 1100px; margin: 0 auto; }
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.value-card {
+  background: var(--bg-soft);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  border: 1px solid var(--border);
+  transition: transform 0.3s;
+}
+.value-card:hover { transform: translateY(-4px); }
+.value-icon { font-size: 40px; margin-bottom: 14px; }
+.value-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+.value-card p  { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+/* About CTA */
+.about-cta {
+  background: var(--brand-gradient);
+  padding: 80px 24px;
+  text-align: center;
+}
+.about-cta-inner { max-width: 680px; margin: 0 auto; }
+.about-cta h2 { font-size: 36px; font-weight: 800; color: white; margin-bottom: 14px; }
+.about-cta p  { font-size: 17px; color: rgba(255,255,255,0.85); margin-bottom: 36px; }
+.about-cta .btn-primary { background: white; color: var(--brand-start); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .crisis-inner { grid-template-columns: 1fr; }
+  .crisis-paw-art { font-size: 80px; }
+}
