@@ -42,7 +42,8 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 # =============================================================================
 
 # Configure Gemini Pro - REPLACE WITH YOUR ACTUAL API KEY
-GEMINI_API_KEY = "AIzaSyA664LRHP7koz_qMz43cUQF8AhGzFTIy58"  # Replace with your actual Gemini API key from https://aistudio.google.com/app/apikey
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+ # Replace with your actual Gemini API key from https://aistudio.google.com/app/apikey
 
 try:
     genai.configure(api_key=GEMINI_API_KEY)
