@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import './VetAssistChat.css'
 
-const API_URL = 'http://127.0.0.1:8001'
+const API_URL = 'https://vetassistai.onrender.com'
 
 const ANIMALS = [
   { id: 'dog',    label: '🐕 Dog' },
